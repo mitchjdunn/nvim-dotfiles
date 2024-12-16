@@ -127,9 +127,14 @@ keymap.set("n", '<leader>de', function() require('telescope.builtin').diagnostic
 keymap.set("t", "<C-w>", "<C-\\><C-n><C-w>")
 keymap.set("t", "<esc>", "<C-\\><C-n>")
 keymap.set("t", "<C-g>", "<C-\\><C-n>")
-keymap.set("n", "<leader><enter>", require('core.terminal').toggle, {
--- Terminal toggle
+keymap.set("n", "<leader><enter>", require('core.utils.terminal').toggle, {
     desc = "Toggle terminal",
     silent = true,
     noremap = true
 })
+keymap.set("n", "<leader>tt", require('core.utils.theme').toggle_background, {
+    desc = "Toggle theme",
+    silent = true,
+    noremap = true
+})
+-- Terminal toggle

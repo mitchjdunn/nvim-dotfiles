@@ -9,7 +9,7 @@ return {
     -- Replace this with your scheme-specific settings or remove to use the defaults
     -- transparent = true,
     background = {
-      -- light = "lotus",
+      light = "lotus",
       dark = "wave", -- "wave, dragon"
     },
     colors = {

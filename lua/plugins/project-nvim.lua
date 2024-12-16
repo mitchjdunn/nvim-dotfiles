@@ -2,9 +2,9 @@ return {
   "coffebar/neovim-project",
   opts = {
     projects = { -- define project roots
-      "~/git/kubernetes-stuff/*",
-      "~/git/*",
-      "~/projects/",
+      "~/projects/*",
+      "~/AppData/Local/nvim/",
+
       "~/.config/*",
     },
     picker = {
