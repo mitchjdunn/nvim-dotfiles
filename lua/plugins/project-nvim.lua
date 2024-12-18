@@ -4,8 +4,10 @@ return {
     projects = { -- define project roots
       "~/git/kubernetes-stuff/*",
       "~/git/*",
-      "~/projects/",
+      "~/projects/*",
       "~/.config/*",
+      "~/workspace/*",
+      "~/workspace/*/*"
     },
     picker = {
       type = "telescope", -- or "fzf-lua"
