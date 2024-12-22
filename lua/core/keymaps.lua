@@ -61,6 +61,13 @@ keymap.set('n', '<leader>fg', require('telescope.builtin').live_grep, {})
 keymap.set('n', '<leader>fb', require('telescope.builtin').buffers, {})
 keymap.set('n', '<leader>fh', require('telescope.builtin').help_tags, {})
 keymap.set('n', '<leader>fs', require('telescope.builtin').current_buffer_fuzzy_find, {})
+  -- find keymapping
+keymap.set('n', '<leader>fk', function()
+  require('telescope.builtin').live_grep({
+    search_dirs = {"/home/mitch/.config/nvim/lua/core/keymaps.lua"},
+    default_text = "k"
+  })
+end, {})
 keymap.set('n', '<leader>fo', require('telescope.builtin').lsp_document_symbols, {})
 keymap.set('n', '<leader>fi', require('telescope.builtin').lsp_incoming_calls, {})
 keymap.set('n', '<leader>fm', function() require('telescope.builtin').treesitter({ default_text = ":method:" }) end)
@@ -150,4 +157,17 @@ keymap.set("n", "<leader>ft", ":FloatermNew<CR>")    -- desc = "New Terminal" },
 keymap.set("n", "<leader>fn", ":FloatermNext<CR>")   -- desc = "Next Terminal" },
 keymap.set("n", "<leader>fp", ":FloatermPrev<CR>")   -- desc = "Prev Terminal" },
 keymap.set("n", "<leader>tt", ":FloatermToggle<CR>") -- desc = "Toggle Terminal" },
-keymap.set("n", "<leader>tg", ":FloatermNew lazygit<CR>") -- desc = "Toggle Terminal" },
+keymap.set("n", "<leader>tg", function()
+  require('core.terminal').toggle_or_create_floating_terminal("lazygit", "lazygit")
+end)
+
+keymap.set("n", "<leader>aa", function()
+  require('core.terminal').toggle_or_create_floating_terminal("anthropic_chat", "aider")
+end)
+
+keymap.set("n", "<leader>ao", function()
+  require('core.terminal').toggle_or_create_floating_terminal("ollama_chat", "aider --model=ollama_chat/dolphin-mistral")
+end)
+keymap.set("n", "<leader>ac", function()
+  require('core.terminal').toggle_or_create_floating_terminal("code_chat", "aider --model=ollama_chat/hf.co/TheBloke/CodeBooga-34B-v0.1-GGUF:Q2_K")
+end)

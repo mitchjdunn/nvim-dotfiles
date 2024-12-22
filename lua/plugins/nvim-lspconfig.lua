@@ -73,9 +73,6 @@ return {
     -- https://github.com/williamboman/mason-lspconfig.nvim
     { 'williamboman/mason-lspconfig.nvim' },
 
-    -- auto install lsp tools
-    { 'WhoIsSethDaniel/mason-tool-installer.nvim' },
-
     -- Useful status updates for LSP
     -- https://github.com/j-hui/fidget.nvim
     { 'j-hui/fidget.nvim',                opts = {} },
@@ -94,7 +91,6 @@ return {
         -- 'html', -- requires npm to be installed
         'lua_ls',
         'gopls',
-        'jdtls',
         -- 'jsonls', -- requires npm to be installed
         'lemminx',
         'marksman',
@@ -110,25 +106,13 @@ return {
       -- Create your keybindings here...
     end
 
-    require('mason-tool-installer').setup({
-      -- install linters, formatters, debuggers
-      ensure_installed = {
-        'java-debug-adapter',
-        'java-test',
-      },
-    })
-
-    vim.api.nvim_command('MasonToolsInstall')
     -- Call setup on each LSP server
     require('mason-lspconfig').setup_handlers({
       function(server_name)
-        -- dont call jdtl for java lsp because jdtls is already good for it
-        if server_name ~= 'jdtls' then
-          lspconfig[server_name].setup({
-            on_attach = lsp_attach,
-            capabilities = lsp_capabilities,
-          })
-        end
+        lspconfig[server_name].setup({
+          on_attach = lsp_attach,
+          capabilities = lsp_capabilities,
+        })
       end
     })
 

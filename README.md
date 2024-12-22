@@ -23,10 +23,40 @@ mv ~/.config/nvim ~/.config/nvim.backup
 
 2. Clone this repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/nvim-config.git ~/.config/nvim
+git clone https://github.com/mitchjdunn/nvim-dotfiles.git ~/.config/nvim
 ```
 
 3. Start Neovim - plugins will be automatically installed via lazy.nvim
+
+
+### install depenendencies 
+Whoops, I started this sections late, I'll have to add the missing depenendencies.
+
+1. typescript
+```bash
+sudo npm install -g typescript typescript-language-server prettier eslint_d
+```
+
+2. aider and AI setup
+```bash
+# Install aider
+pip install aider-chat
+
+# Set up Anthropic API key (for Claude)
+echo 'export ANTHROPIC_API_KEY="your-api-key-here"' >> ~/.zshrc
+
+# Install Ollama
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Pull the Dolphin Mistral model
+ollama pull dolphin-mistral
+
+# Set up Ollama environment variables (optional - for custom endpoint)
+echo 'export OLLAMA_HOST="http://localhost:11434"' >> ~/.zshrc
+echo 'export OLLAMA_API_BASE="http://localhost:11434/api"' >> ~/.zshrc
+```
+
+Note: After setting environment variables, restart your terminal or run `source ~/.zshrc`
 
 ## Structure
 

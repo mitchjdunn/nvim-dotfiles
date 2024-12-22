@@ -1,4 +1,3 @@
-
 -- ~/.config/nvim/lua/core/terminal.lua
 
 -- Create the terminal module
@@ -47,6 +46,31 @@ function M.toggle()
         vim.api.nvim_win_hide(M.terminal_winnr)
         M.terminal_winnr = nil
     end
+end
+
+function M.toggle_or_create_floating_terminal(name, cmd)
+  -- Get list of all buffers
+  local buffers = vim.api.nvim_list_bufs()
+  local exists = false
+  
+  -- Check each buffer for floaterm and matching name
+  for _, bufnr in ipairs(buffers) do
+    if vim.api.nvim_buf_is_valid(bufnr) then
+      local ft = vim.api.nvim_buf_get_option(bufnr, 'filetype')
+      local buf_name = vim.fn.getbufvar(bufnr, 'term_title', '')
+      if ft == 'floaterm' and buf_name:match(name) then
+        exists = true
+        break
+      end
+    end
+  end
+
+  if exists then
+    vim.cmd(string.format('FloatermToggle %s', name))
+  else
+    -- Use login shell and source profile before running command
+    vim.cmd(string.format('FloatermNew --shell=/bin/zsh --name=%s source ~/.zshrc && %s', name, cmd))
+  end
 end
 
 return M
