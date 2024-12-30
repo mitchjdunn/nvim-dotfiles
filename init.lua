@@ -15,13 +15,16 @@ vim.opt.rtp:prepend(lazypath)
 -- This has to be set before initializing lazy
 vim.g.mapleader = " "
 
--- Initialize lazy with dynamic loading of anything in the plugins directory
-require("lazy").setup("plugins", {
-  { import = "lazyvim.plugins.extras.lang.go" },
-  change_detection = {
-    enabled = true, -- automatically check for config file changes and reload the ui
-    notify = true,  -- turn on notifications whenever plugin changes are made
+-- Setup lazy.nvim
+require("lazy").setup({
+  spec = {
+    -- import your plugins
+    { import = "plugins" },
+    {import = "plugins.lsp" }
   },
+  -- Configure any other settings here. See the documentation for more details.
+  -- colorscheme that will be used when installing plugins.
+  checker = { enabled = true, notify = false },
 })
 
 -- These modules are not loaded by lazy

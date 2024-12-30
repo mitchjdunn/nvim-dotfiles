@@ -56,6 +56,7 @@ keymap.set("n", "<leader>er", ":NvimTreeFocus<CR>")    -- toggle focus to file e
 keymap.set("n", "<leader>ef", ":NvimTreeFindFile<CR>") -- find file in file explorer
 
 -- Telescope
+keymap.set('n', '<c-p>', require('telescope.builtin').find_files, {})
 keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, {})
 keymap.set('n', '<leader>fg', require('telescope.builtin').live_grep, {})
 keymap.set('n', '<leader>fb', require('telescope.builtin').buffers, {})
@@ -65,7 +66,7 @@ keymap.set('n', '<leader>fs', require('telescope.builtin').current_buffer_fuzzy_
 keymap.set('n', '<leader>fk', function()
   require('telescope.builtin').live_grep({
     search_dirs = {"/home/mitch/.config/nvim/lua/core/keymaps.lua"},
-    default_text = "k"
+    default_text = ""
   })
 end, {})
 keymap.set('n', '<leader>fo', require('telescope.builtin').lsp_document_symbols, {})
@@ -92,23 +93,75 @@ keymap.set("n", "<leader>h9", function() require("harpoon.ui").nav_file(9) end)
 keymap.set("n", "<leader>xr", ":call VrcQuery()<CR>") -- Run REST query
 
 -- LSP
+
+-- LSP Keybindings (all with <leader>g prefix):
+-- `<leader>gg` - Hover documentation
+-- `<leader>gd` - Go to definition 
+-- `<leader>gD` - Go to declaration
+-- `<leader>gi` - Go to implementation
+-- `<leader>gr` - Find references
+-- `<leader>gf` - Format code
+-- `<leader>ga` - Code actions
+-- `<leader>gl` - Show diagnostics
 keymap.set('n', '<leader>gg', '<cmd>lua vim.lsp.buf.hover()<CR>')
-keymap.set('n', '<leader>gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
+keymap.set('n', '<leader>gd', '<cmd>Telescope lsp_definitions<CR>')
 keymap.set('n', '<leader>gD', '<cmd>lua vim.lsp.buf.declaration()<CR>')
-keymap.set('n', '<leader>gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
+keymap.set('n', '<leader>gi', '<cmd>Telescope lsp_implementations<CR>')
 keymap.set('n', '<leader>gI', '<cmd>lua require("actions-preview").code_actions()<CR>')
-keymap.set('n', '<leader>gt', '<cmd>lua vim.lsp.buf.type_definition()<CR>')
+keymap.set('n', '<leader>gt', '<cmd>Telescope lsp_type_definitions<CR>')
+keymap.set("n", "<leader>gR", "<cmd>Telescope lsp_references<CR>")-- show definition, references
 keymap.set('n', '<leader>gr', '<cmd>lua vim.lsp.buf.references()<CR>')
 keymap.set('n', '<leader>gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>')
 keymap.set('n', '<leader>rr', '<cmd>lua vim.lsp.buf.rename()<CR>')
 keymap.set('n', '<leader>gf', '<cmd>lua vim.lsp.buf.format({async = true})<CR>')
 keymap.set('v', '<leader>gf', '<cmd>lua vim.lsp.buf.format({async = true})<CR>')
 keymap.set('n', '<leader>ga', '<cmd>lua vim.lsp.buf.code_action()<CR>')
+keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>") -- show  diagnostics for file
+keymap.set("n", "<leader>d", vim.diagnostic.open_float) -- show diagnostics for line
 keymap.set('n', '<leader>gl', '<cmd>lua vim.diagnostic.open_float()<CR>')
 keymap.set('n', '<leader>gp', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
 keymap.set('n', '<leader>gn', '<cmd>lua vim.diagnostic.goto_next()<CR>')
 keymap.set('n', '<leader>tr', '<cmd>lua vim.lsp.buf.document_symbol()<CR>')
 keymap.set('i', '<C-Space>', '<cmd>lua vim.lsp.buf.completion()<CR>')
+
+--opts.desc = "Show LSP references"
+--keymap.set("n", "gR", "<cmd>Telescope lsp_references<CR>", opts) -- show definition, references
+--
+--opts.desc = "Go to declaration"
+--keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
+--
+--opts.desc = "Show LSP definitions"
+--keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
+--
+--opts.desc = "Show LSP implementations"
+--keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts) -- show lsp implementations
+--
+--opts.desc = "Show LSP type definitions"
+--keymap.set("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts) -- show lsp type definitions
+--
+--opts.desc = "See available code actions"
+--keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
+--
+--opts.desc = "Smart rename"
+--keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- smart rename
+--
+--opts.desc = "Show buffer diagnostics"
+--keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show  diagnostics for file
+--
+--opts.desc = "Show line diagnostics"
+--keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts) -- show diagnostics for line
+--
+--opts.desc = "Go to previous diagnostic"
+--keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
+--
+--opts.desc = "Go to next diagnostic"
+--keymap.set("n", "]d", vim.diagnostic.goto_next, opts) -- jump to next diagnostic in buffer
+--
+--opts.desc = "Show documentation for what is under cursor"
+--keymap.set("n", "K", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
+--
+--opts.desc = "Restart LSP"
+--keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
 
 -- Debugging
 keymap.set("n", "<leader>bb", "<cmd>lua require'dap'.toggle_breakpoint()<cr>")
@@ -160,14 +213,8 @@ keymap.set("n", "<leader>tt", ":FloatermToggle<CR>") -- desc = "Toggle Terminal"
 keymap.set("n", "<leader>tg", function()
   require('core.terminal').toggle_or_create_floating_terminal("lazygit", "lazygit")
 end)
+keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>")
 
-keymap.set("n", "<leader>aa", function()
-  require('core.terminal').toggle_or_create_floating_terminal("anthropic_chat", "aider")
-end)
-
-keymap.set("n", "<leader>ao", function()
-  require('core.terminal').toggle_or_create_floating_terminal("ollama_chat", "aider --model=ollama_chat/dolphin-mistral")
-end)
-keymap.set("n", "<leader>ac", function()
-  require('core.terminal').toggle_or_create_floating_terminal("code_chat", "aider --model=ollama_chat/hf.co/TheBloke/CodeBooga-34B-v0.1-GGUF:Q2_K")
-end)
+-- keymap.set("n", "<leader>aa", function()
+--   require('core.terminal').toggle_or_create_floating_terminal("anthropic_chat", "aider")
+-- end)

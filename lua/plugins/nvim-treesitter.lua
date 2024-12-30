@@ -15,7 +15,18 @@ return {
     indent = { enable = true },
     auto_install = true, -- automatically install syntax support when entering new file type buffer
     ensure_installed = {
-      'lua',"go", "gomod", "gowork", "gosum",
+        'lua',"go", "gomod", "gowork", "gosum",
+				"javascript",
+				"typescript",
+				"python",
+				"sql",
+				"make",
+				"dockerfile",
+				"yaml",
+				"graphql",
+				"terraform",
+				"proto",
+				"html",
     },
   },
   config = function (_, opts)
