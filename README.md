@@ -58,6 +58,11 @@ echo 'export OLLAMA_API_BASE="http://localhost:11434/api"' >> ~/.zshrc
 
 Note: After setting environment variables, restart your terminal or run `source ~/.zshrc`
 
+3. go
+```
+go install delve
+```
+
 ## Structure
 
 ```
