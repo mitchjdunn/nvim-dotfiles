@@ -1,11 +1,12 @@
-return {
-  "coffebar/neovim-project",
+return { "coffebar/neovim-project",
   opts = {
     projects = { -- define project roots
       "~/git/kubernetes-stuff/*",
       "~/git/*",
       "~/projects/",
       "~/.config/*",
+      "~/workspace/*",
+      "~/workspace/*/*"
     },
     picker = {
       type = "telescope", -- or "fzf-lua"
