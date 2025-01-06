@@ -1,3 +1,11 @@
+-- Check if JDTLS is already running
+local bufnr = vim.api.nvim_get_current_buf()
+local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+for _, client in ipairs(clients) do
+    if client.name == "jdtls" then
+        return  -- Exit if JDTLS is already attached
+    end
+end
 -- JDTLS (Java LSP) configuration
 local home = vim.env.HOME -- Get the home directory
 
@@ -38,7 +46,7 @@ local config = {
 		"-Declipse.product=org.eclipse.jdt.ls.core.product",
 		"-Dlog.protocol=true",
 		"-Dlog.level=ALL",
-		"-javaagent:" .. home .. "/.local/share/nvim/mason/share/jdtls/lombok.jar",
+		"-javaagent:" .. home .. "/.m2/repository/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar",
 		"-Xmx4g",
 		"--add-modules=ALL-SYSTEM",
 		"--add-opens",
@@ -76,7 +84,15 @@ local config = {
 						name = "OpenJDK_17",
 						path = "~/.jenv/shims/java",
 					},
+          plugins = {
+            "lombok",
+          },
 				},
+        jdt = {
+            ls = {
+                lombokSupport = true,
+            },
+        },
 			},
 			maven = {
 				downloadSources = true,
