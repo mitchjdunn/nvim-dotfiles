@@ -13,6 +13,10 @@ local jdtls = require("jdtls")
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 local workspace_dir = home .. "/jdtls-workspace/" .. project_name
 
+local java_home = vim.fn.trim(vim.fn.system('~/.jenv/bin/jenv javahome'))
+-- Path to tools.jar (contains the annotation processor)
+local tools_jar = java_home .. "/lib/tools.jar"
+
 local system_os = ""
 
 -- Determine OS
@@ -35,33 +39,40 @@ local bundles = {
 -- Needed for running/debugging unit tests
 vim.list_extend(bundles, vim.split(vim.fn.glob(home .. "/.local/share/nvim/mason/share/java-test/*.jar", true), "\n"))
 
+local function on_attach(client, bufnr)
+    -- Set up DAP
+    jdtls.setup_dap({ hotcodereplace = "auto" })
+    require("jdtls.dap").setup_dap_main_class_configs()
+end
 -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
 local config = {
   -- The command that starts the language server
   -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
+  on_attach = on_attach,
   cmd = {
-    "java",
-    "-Declipse.application=org.eclipse.jdt.ls.core.id1",
-    "-Dosgi.bundles.defaultStartLevel=4",
-    "-Declipse.product=org.eclipse.jdt.ls.core.product",
-    "-Dlog.protocol=true",
-    "-Dlog.level=ALL",
-    "-javaagent:" .. home .. "/.m2/repository/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar",
-    "-Xbootclasspath/a:" .. home .. "/.m2/repository/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar",
-    "-Xmx4g",
-    "--add-modules=ALL-SYSTEM",
-    "--add-opens",
-    "java.base/java.util=ALL-UNNAMED",
-    "--add-opens",
-    "java.base/java.lang=ALL-UNNAMED",
-
-    -- Eclipse jdtls location
-    "-jar",
-    home .. "/.local/share/nvim/mason/share/jdtls/plugins/org.eclipse.equinox.launcher.jar",
-    "-configuration",
-    home .. "/.local/share/nvim/mason/packages/jdtls/config_" .. system_os,
-    "-data",
-    workspace_dir,
+        vim.fn.expand("~/.jenv/shims/java"),
+        "--add-modules=ALL-SYSTEM",
+        "--add-opens", "java.base/java.util=ALL-UNNAMED",
+        "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+        "--add-modules=jdk.compiler",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
+        "--add-exports", "jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
+        "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+        "-Dosgi.bundles.defaultStartLevel=4",
+        "-Declipse.product=org.eclipse.jdt.ls.core.product",
+        "-Dlog.protocol=true",
+        "-Dlog.level=ALL",
+        "-javaagent:" .. home .. "/.m2/repository/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar",
+        "-Xmx4g",
+        "-jar", vim.fn.expand("~/.local/share/nvim/mason/share/jdtls/plugins/org.eclipse.equinox.launcher.jar"),
+        "-configuration", vim.fn.expand("~/.local/share/nvim/mason/packages/jdtls/config_" .. system_os),
+        "-data", workspace_dir,
   },
 
   -- This is the default if not provided, you can remove it. Or adjust as needed.
@@ -173,12 +184,6 @@ local config = {
     bundles = bundles,
   },
 }
-
--- Needed for debugging
-config["on_attach"] = function(client, bufnr)
-  jdtls.setup_dap({ hotcodereplace = "auto" })
-  require("jdtls.dap").setup_dap_main_class_configs()
-end
 
 -- This starts a new client & server, or attaches to an existing client & server based on the `root_dir`.
 jdtls.start_or_attach(config)
