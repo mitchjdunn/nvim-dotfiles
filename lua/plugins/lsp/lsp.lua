@@ -1,6 +1,8 @@
 return {
   'neovim/nvim-lspconfig',
   event = 'VeryLazy',
+  -- opts = {
+  -- },
   setup = {
     gopls = function(_, opts)
       -- workaround for gopls not supporting semanticTokensProvider
@@ -58,15 +60,14 @@ return {
     mason_lspconfig.setup_handlers({
       -- default handler for installed servers
       function(server_name)
-
         if ignored_servers[server_name] then
           return
         end
-
         lspconfig[server_name].setup({
           capabilities = lsp_capabilities,
         })
       end,
+
       ["graphql"] = function()
         -- configure graphql language server
         lspconfig["graphql"].setup({
