@@ -55,8 +55,8 @@ return {
           "html",
           "css",
           "json",
-          "markdown",
-          "markdown_inline"
+          -- "markdown",
+          -- "markdown_inline"
         })
       end
     end,

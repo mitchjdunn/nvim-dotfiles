@@ -18,12 +18,14 @@ return {
   },
   opts = {
     defaults = {
+      
       layout_config = {
         vertical = {
           width = 0.75
         }
       },
       path_display = {
+        "smart",
         filename_first = {
           reverse_directories = true
         }
