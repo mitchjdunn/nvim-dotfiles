@@ -25,7 +25,7 @@ return {
     "hrsh7th/cmp-nvim-lsp",
     -- Additional lua configuration, makes nvim stuff amazing!
     { "antosha417/nvim-lsp-file-operations", config = true },
-    { 'folke/neodev.nvim',                opts = {} },
+    { 'folke/neodev.nvim',                   opts = {} },
   },
   config = function()
     require('mason').setup()
@@ -35,7 +35,7 @@ return {
     local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
     -- Call setup on each LSP server
-    require('mason-lspconfig').setup_handlers({
+    mason_lspconfig.setup_handlers({
       function(server_name)
         lspconfig[server_name].setup({
           capabilities = lsp_capabilities,
@@ -73,18 +73,28 @@ return {
       end,
       ["templ"] = function()
         lspconfig["templ"].setup({
-            capabilities = lsp_capabilities
+          capabilities = lsp_capabilities
         })
       end,
       ["gopls"] = function()
         lspconfig["gopls"].setup({
-            capabilities = lsp_capabilities
+          capabilities = lsp_capabilities
         })
       end,
       ["html"] = function()
         lspconfig["html"].setup({
-            capabilities = lsp_capabilities,
-            filetypes = {"html", "templ"}
+          capabilities = lsp_capabilities,
+          filetypes = { "html", "templ" }
+        })
+      end,
+      ['tsserver'] = function()
+        lspconfig.tsserver.setup({
+          capabilities = lsp_capabilities,
+          settings = {
+            completions = {
+              completeFunctionCalls = true
+            }
+          }
         })
       end,
       ["lua_ls"] = function()

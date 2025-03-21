@@ -209,6 +209,8 @@ keymap.set("n", "<leader><enter>", require('core.terminal').toggle, {
 keymap.set("n", "<leader>ft", ":FloatermNew<CR>")    -- desc = "New Terminal" },
 keymap.set("n", "<leader>fn", ":FloatermNext<CR>")   -- desc = "Next Terminal" },
 keymap.set("n", "<leader>fp", ":FloatermPrev<CR>")   -- desc = "Prev Terminal" },
+keymap.set("t", "<c-]>", "<C-\\><C-n>:FloatermNext<CR>")   -- desc = "Next Terminal" },
+keymap.set("t", "<c-[>", "<C-\\><C-n>:FloatermPrev<CR>")   -- desc = "Prev Terminal" },
 keymap.set("n", "<leader>tt", ":FloatermToggle<CR>") -- desc = "Toggle Terminal" },
 keymap.set("n", "<leader>tg", function()
   require('core.terminal').toggle_or_create_floating_terminal("lazygit", "lazygit")

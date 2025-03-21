@@ -9,7 +9,9 @@ return {
       end
       
       -- Configure TypeScript LSP
-      opts.servers.tsserver = {
+      opts.servers.typescript = {
+        filetypes = { "typescript", "typescriptreact", "typescript.tsx" },
+        cmd = { "typescript-language-server", "--stdio" },
         settings = {
           typescript = {
             inlayHints = {
