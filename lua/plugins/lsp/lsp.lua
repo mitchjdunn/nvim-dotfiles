@@ -1,6 +1,8 @@
 return {
   'neovim/nvim-lspconfig',
   event = 'VeryLazy',
+  -- opts = {
+  -- },
   setup = {
     gopls = function(_, opts)
       -- workaround for gopls not supporting semanticTokensProvider
@@ -41,7 +43,19 @@ return {
           capabilities = lsp_capabilities,
         })
       end
+    -- Add the mason-lspconfig setup with jdtls exclusion
+    mason_lspconfig.setup({
+      ensure_installed = { "lua_ls", "gopls" },  -- Add your required servers
+      automatic_installation = {
+        exclude = { "jdtls" }  -- Exclude jdtls as it's handled by nvim-jdtls
+      }
     })
+
+    -- Define a table of servers to ignore in the general handler
+    local ignored_servers = {
+      ["jdtls"] = true
+    }
+
     -- Change the Diagnostic symbols in the sign column (gutter)
     -- (not in youtube nvim video)
     local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
@@ -53,10 +67,14 @@ return {
     mason_lspconfig.setup_handlers({
       -- default handler for installed servers
       function(server_name)
+        if ignored_servers[server_name] then
+          return
+        end
         lspconfig[server_name].setup({
           capabilities = lsp_capabilities,
         })
       end,
+
       ["graphql"] = function()
         -- configure graphql language server
         lspconfig["graphql"].setup({

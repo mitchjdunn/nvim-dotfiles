@@ -3,7 +3,7 @@ return { "coffebar/neovim-project",
     projects = { -- define project roots
       "~/git/kubernetes-stuff/*",
       "~/git/*",
-      "~/projects/",
+      "~/projects/*",
       "~/.config/*",
       "~/workspace/*",
       "~/workspace/*/*"
